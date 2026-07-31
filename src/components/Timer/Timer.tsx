@@ -29,7 +29,7 @@ function Timer() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+    <div>
       <div className="bg-slate-800 rounded-2xl shadow-xl p-10 w-80 text-center">
 
         <h2 className="text-slate-400 text-sm font-medium uppercase tracking-wide mb-2">
