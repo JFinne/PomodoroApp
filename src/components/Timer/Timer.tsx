@@ -1,4 +1,5 @@
-import useTimer, { SESSION_TYPES } from '../../hooks/useTimer';
+import { useTimerContext } from '../../context/TimerContext';
+import { SESSION_TYPES } from '../../hooks/useTimer';
 import { formatTime } from '../../utils/timeFormat';
 import { PRESETS } from '../../utils/presets';
 import CircularProgress from './CircularProgress';
@@ -21,12 +22,7 @@ function Timer() {
     reset,
     switchSession,
     applyPreset,
-  } = useTimer({
-    initialPreset: PRESETS[0],
-    onSessionComplete: (finishedType) => {
-      console.log(`${finishedType} session complete!`);
-    },
-  });
+  } = useTimerContext();
 
   // The ring drains as time passes, so progress should shrink
   // as timeLeft shrinks — timeLeft / totalDuration gives exactly
