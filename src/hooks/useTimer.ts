@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Preset } from '../types';
 
-// A union type: sessionType can ONLY ever be one of these three
-// exact strings. If you typo 'WROK' anywhere, TypeScript flags
-// it immediately, at write-time, instead of you discovering the
-// bug at runtime when the timer silently doesn't switch modes.
 export type SessionType = 'work' | 'shortBreak' | 'longBreak';
 
 export const SESSION_TYPES: Record<string, SessionType> = {
@@ -12,25 +9,31 @@ export const SESSION_TYPES: Record<string, SessionType> = {
   LONG_BREAK: 'longBreak',
 };
 
-// The shape of the config object useTimer accepts. Every field
-// is optional (the `?`) because we provide defaults below —
-// TypeScript enforces that if you DO pass a value, it has to be
-// the right type (e.g. workDuration must be a number, not a string).
+/**
+ * Durations now live in their OWN state object, separate from
+ * everything else. This is the change that makes preset
+ * switching possible: in the previous version, workDuration
+ * etc. were just parameters captured once when the hook first
+ * ran — there was no way to change them afterward. Now they're
+ * real state, so applyPreset() can update them at any time, and
+ * every calculation that depends on them (getDurationForSession)
+ * automatically picks up the new values on the next render.
+ */
+interface Durations {
+  work: number;
+  shortBreak: number;
+  longBreak: number;
+}
+
 interface UseTimerConfig {
-  workDuration?: number;
-  shortBreakDuration?: number;
-  longBreakDuration?: number;
+  initialPreset: Preset;
   sessionsBeforeLongBreak?: number;
   onSessionComplete?: (sessionType: SessionType) => void;
 }
 
-// The shape of what the hook returns. Writing this out explicitly
-// means any component using this hook gets autocomplete AND
-// type-checking on timeLeft, start, pause, etc. — your editor
-// will warn you if you try to call start() with an argument, for
-// instance, since start takes none.
 interface UseTimerReturn {
   timeLeft: number;
+  totalDuration: number;      // duration of the CURRENT session type — needed for the progress ring's math
   sessionType: SessionType;
   isRunning: boolean;
   completedWorkSessions: number;
@@ -38,39 +41,42 @@ interface UseTimerReturn {
   pause: () => void;
   reset: () => void;
   switchSession: (type: SessionType) => void;
+  applyPreset: (preset: Preset) => void;
 }
 
 function useTimer({
-  workDuration = 25 * 60,
-  shortBreakDuration = 5 * 60,
-  longBreakDuration = 15 * 60,
+  initialPreset,
   sessionsBeforeLongBreak = 4,
   onSessionComplete,
-}: UseTimerConfig = {}): UseTimerReturn {
+}: UseTimerConfig): UseTimerReturn {
+  const [durations, setDurations] = useState<Durations>({
+    work: initialPreset.workDuration,
+    shortBreak: initialPreset.shortBreakDuration,
+    longBreak: initialPreset.longBreakDuration,
+  });
+
   const [sessionType, setSessionType] = useState<SessionType>(SESSION_TYPES.WORK);
-  const [timeLeft, setTimeLeft] = useState<number>(workDuration);
+  const [timeLeft, setTimeLeft] = useState<number>(initialPreset.workDuration);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [completedWorkSessions, setCompletedWorkSessions] = useState<number>(0);
 
-  // useRef needs a type argument for what it'll hold. Since
-  // setInterval in the browser returns a `number` (a numeric
-  // timer ID), and the ref starts out holding nothing, we type
-  // it as number | null and initialize with null.
   const intervalRef = useRef<number | null>(null);
 
+  // Now reads from `durations` STATE instead of fixed params,
+  // so it always reflects whatever preset is currently active.
   const getDurationForSession = useCallback(
     (type: SessionType): number => {
       switch (type) {
         case SESSION_TYPES.SHORT_BREAK:
-          return shortBreakDuration;
+          return durations.shortBreak;
         case SESSION_TYPES.LONG_BREAK:
-          return longBreakDuration;
+          return durations.longBreak;
         case SESSION_TYPES.WORK:
         default:
-          return workDuration;
+          return durations.work;
       }
     },
-    [workDuration, shortBreakDuration, longBreakDuration]
+    [durations]
   );
 
   useEffect(() => {
@@ -127,8 +133,29 @@ function useTimer({
     [getDurationForSession]
   );
 
+  /**
+   * Switching presets always resets to a fresh WORK session
+   * rather than trying to preserve progress in whatever session
+   * was active — mixing "3 minutes left of a 25-minute session"
+   * with a switch to the 50-minute preset doesn't have a
+   * sensible meaning, so we just start clean.
+   */
+  const applyPreset = useCallback((preset: Preset) => {
+    setIsRunning(false);
+    setDurations({
+      work: preset.workDuration,
+      shortBreak: preset.shortBreakDuration,
+      longBreak: preset.longBreakDuration,
+    });
+    setSessionType(SESSION_TYPES.WORK);
+    setTimeLeft(preset.workDuration);
+  }, []);
+
+  const totalDuration = getDurationForSession(sessionType);
+
   return {
     timeLeft,
+    totalDuration,
     sessionType,
     isRunning,
     completedWorkSessions,
@@ -136,6 +163,7 @@ function useTimer({
     pause,
     reset,
     switchSession,
+    applyPreset,
   };
 }
 
