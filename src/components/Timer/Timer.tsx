@@ -55,15 +55,15 @@ function Timer() {
         ))}
       </select>
 
-      <CircularProgress progress={progress} size={340} strokeWidth={14}>
-        <div className="flex flex-col items-center">
-          <span className="text-slate-400 text-sm font-medium uppercase tracking-wide mb-2">
+      <CircularProgress progress={progress} viewBoxSize={340} strokeWidth={14}>
+        <div className="flex flex-col items-center px-2">
+          <span className="text-slate-400 text-xs sm:text-sm font-medium uppercase tracking-wide mb-1 sm:mb-2 text-center">
             {sessionLabels[sessionType]}
           </span>
-          <span className="text-white text-6xl font-bold tabular-nums">
+          <span className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold tabular-nums">
             {formatTime(timeLeft)}
           </span>
-          <span className="text-slate-500 text-xs mt-3">
+          <span className="text-slate-500 text-[10px] sm:text-xs mt-2 sm:mt-3 text-center">
             Completed today: {completedWorkSessions}
           </span>
         </div>

@@ -40,7 +40,12 @@ function TodoList() {
   }
 
   return (
-    <div className="bg-slate-800 rounded-2xl shadow-xl p-8 w-[28rem]">
+    // w-full lets it shrink to fit small phone screens (respecting
+    // the parent's horizontal padding), while max-w-[28rem] caps
+    // it at the same visual size as before on larger screens — so
+    // desktop looks identical to what you already had, but mobile
+    // no longer overflows the viewport.
+    <div className="bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-[28rem]">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-slate-400 text-sm font-medium uppercase tracking-wide">
           To-Do

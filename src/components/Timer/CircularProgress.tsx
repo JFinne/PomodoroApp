@@ -1,51 +1,59 @@
 import type { ReactNode } from 'react';
 
 interface CircularProgressProps {
-  progress: number;    // 0 (empty) to 1 (full)
-  size?: number;        // diameter in pixels
+  progress: number;
+  viewBoxSize?: number;   // internal coordinate system size — affects stroke math only, NOT actual rendered size
   strokeWidth?: number;
   trackColor?: string;
   progressColor?: string;
-  children?: ReactNode;  // content rendered in the center (the time text)
+  children?: ReactNode;
 }
 
 function CircularProgress({
   progress,
-  size = 320,
+  viewBoxSize = 340,
   strokeWidth = 12,
-  trackColor = '#1e293b',   // slate-800
-  progressColor = '#10b981', // emerald-500
+  trackColor = '#1e293b',
+  progressColor = '#10b981',
   children,
 }: CircularProgressProps) {
-  // Radius has to account for stroke width, or the ring's edge
-  // gets clipped by the SVG's own boundary.
-  const radius = (size - strokeWidth) / 2;
+  const radius = (viewBoxSize - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-
-  // Clamp progress to [0, 1] defensively — a stray negative or
-  // >1 value (e.g. from a bug elsewhere) would otherwise draw a
-  // visually broken ring instead of just capping sensibly.
   const clampedProgress = Math.min(1, Math.max(0, progress));
   const dashOffset = circumference * (1 - clampedProgress);
 
   return (
-    // relative positioning lets us absolutely-center the
-    // children (time text) directly on top of the SVG ring.
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
-        {/* Track: the full, dim background ring */}
+    // THE RESPONSIVE PART: actual rendered size is controlled
+    // here, via Tailwind width classes that change per breakpoint,
+    // combined with aspect-square to keep it a perfect circle at
+    // any size. This div's real pixel size can be anything — the
+    // SVG inside will scale to fill it because of viewBox (below),
+    // without needing to touch any of the stroke-dashoffset math.
+    <div className="relative w-[70vw] max-w-[220px] sm:max-w-[280px] lg:max-w-[340px] aspect-square mx-auto">
+      {/* viewBox defines an internal coordinate system independent
+          of the SVG's actual rendered pixel size. We draw the
+          circle using viewBoxSize-based coordinates (same as
+          before), and width="100%"/height="100%" tells the SVG to
+          stretch that coordinate system to fill whatever size its
+          parent div actually renders at — that's what makes the
+          ring scale smoothly across breakpoints for free. */}
+      <svg
+        viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+        width="100%"
+        height="100%"
+        className="-rotate-90"
+      >
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
           stroke={trackColor}
           strokeWidth={strokeWidth}
         />
-        {/* Progress: drawn on top, animates via dashoffset */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
           stroke={progressColor}
@@ -57,8 +65,6 @@ function CircularProgress({
         />
       </svg>
 
-      {/* Centered content sits in a separate absolutely-positioned
-          div, layered on top of the SVG via the parent's `relative`. */}
       <div className="absolute inset-0 flex items-center justify-center">
         {children}
       </div>
