@@ -55,7 +55,7 @@ function DailyPlanner() {
   }
 
   return (
-    <div className="bg-[var(--bg-card)] rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-[28rem]">
+    <div className="bg-[var(--bg-card)] rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-[28rem] lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl">
       <h2 className="text-[var(--text-muted)] text-sm font-medium uppercase tracking-wide mb-4">
         Today
       </h2>
