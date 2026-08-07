@@ -38,8 +38,6 @@ function CategorySettings() {
 
   return (
     <div>
-      <h3 className="text-white text-sm font-semibold mb-3">To-Do Categories</h3>
-
       <ul className="flex flex-col gap-2 mb-4">
         {categories.map((category) => (
           <li

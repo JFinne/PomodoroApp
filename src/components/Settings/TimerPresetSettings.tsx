@@ -75,7 +75,6 @@ function TimerPresetSettings() {
 
   return (
     <div>
-      <h3 className="text-white text-sm font-semibold mb-1">Timer Manager</h3>
       <p className="text-slate-500 text-xs mb-4">
         Set your own work and break durations, or start from a preset.
       </p>

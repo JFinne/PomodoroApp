@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { usePanelsContext } from '../../context/PanelsContext';
 import Timer from '../Timer/Timer';
 import TodoList from '../TodoList/TodoList';
+import DailyPlanner from '../DailyPlanner/DailyPlanner';
 
 function Dashboard() {
   const { openPanels } = usePanelsContext();
@@ -19,6 +20,7 @@ function Dashboard() {
       <Timer />
 
       {openPanels.todo && <TodoList />}
+      {openPanels.dailyPlanner && <DailyPlanner />}
     </div>
   );
 }

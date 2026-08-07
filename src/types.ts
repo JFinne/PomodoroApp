@@ -2,13 +2,13 @@ export interface Task {
   id: number;
   text: string;
   done: boolean;
-  categoryId?: string; // optional — a task doesn't require a category
+  categoryId?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
-  color: string; // hex value, e.g. '#10b981'
+  color: string;
 }
 
 export interface Preset {
@@ -22,4 +22,13 @@ export interface Preset {
 export interface AddonConfig {
   key: string;
   label: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  date: string;      // 'YYYY-MM-DD'
+  title: string;
+  startTime: string; // 'HH:mm'
+  endTime: string;   // 'HH:mm'
+  color: string;
 }
