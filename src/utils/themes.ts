@@ -32,8 +32,8 @@ export const THEMES: Theme[] = [
       textMuted: '#94a3b8',
       textFaint: '#64748b',
       border: '#334155',
-      accent: '#10b981',
-      accentHover: '#34d399',
+      accent: '#0f0596ff',
+      accentHover: '#322b9bff',
     },
   },
   {
@@ -49,13 +49,13 @@ export const THEMES: Theme[] = [
       textMuted: '#64748b',
       textFaint: '#94a3b8',
       border: '#e2e8f0',
-      accent: '#059669',
-      accentHover: '#10b981',
+      accent: '#0f0596ff',
+      accentHover: '#322b9bff',
     },
   },
   {
     id: 'midnight',
-    label: 'Midnight (Ultra-Dark)',
+    label: 'Midnight',
     colors: {
       bgPrimary: '#000000',
       bgCard: '#0a0a0a',
@@ -66,8 +66,8 @@ export const THEMES: Theme[] = [
       textMuted: '#71717a',
       textFaint: '#52525b',
       border: '#27272a',
-      accent: '#22d3ee',
-      accentHover: '#67e8f9',
+      accent: '#0f0596ff',
+      accentHover: '#322b9bff',
     },
   },
   {
