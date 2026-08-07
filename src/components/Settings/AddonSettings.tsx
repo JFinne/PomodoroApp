@@ -13,7 +13,7 @@ function AddonSettings() {
 
   return (
     <div>
-      <p className="text-slate-500 text-xs mb-3">
+      <p className="text-[var(--text-faint)] text-xs mb-3">
         Choose which tools appear on your dashboard.
       </p>
       <AddonMenu addons={ADDONS} openPanels={openPanels} onToggle={togglePanel} />

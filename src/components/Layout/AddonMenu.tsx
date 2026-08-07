@@ -14,13 +14,13 @@ function AddonMenu({ addons, openPanels, onToggle }: AddonMenuProps) {
         return (
           <label
             key={addon.key}
-            className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none"
+            className="flex items-center gap-2 text-sm text-[var(--text-secondary)] cursor-pointer select-none"
           >
             <input
               type="checkbox"
               checked={isOpen}
               onChange={() => onToggle(addon.key)}
-              className="w-4 h-4 accent-emerald-500 cursor-pointer"
+              className="w-4 h-4 accent-[var(--accent)] cursor-pointer"
             />
             {addon.label}
           </label>

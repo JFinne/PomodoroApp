@@ -24,22 +24,17 @@ function Timer() {
 
   const progress = timeLeft / totalDuration;
 
-  // The preset dropdown that used to live here is gone — preset
-  // selection now happens in Settings via TimerPresetSettings.tsx,
-  // which calls selectPreset() from the same TimerContext this
-  // component reads from. Both stay in sync automatically since
-  // they share one source of truth.
   return (
     <div className="flex flex-col items-center gap-6">
       <CircularProgress progress={progress} viewBoxSize={340} strokeWidth={14}>
         <div className="flex flex-col items-center px-2">
-          <span className="text-slate-400 text-xs sm:text-sm font-medium uppercase tracking-wide mb-1 sm:mb-2 text-center">
+          <span className="text-[var(--text-muted)] text-xs sm:text-sm font-medium uppercase tracking-wide mb-1 sm:mb-2 text-center">
             {sessionLabels[sessionType]}
           </span>
-          <span className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold tabular-nums">
+          <span className="text-[var(--text-primary)] text-4xl sm:text-5xl lg:text-6xl font-bold tabular-nums">
             {formatTime(timeLeft)}
           </span>
-          <span className="text-slate-500 text-[10px] sm:text-xs mt-2 sm:mt-3 text-center">
+          <span className="text-[var(--text-faint)] text-[10px] sm:text-xs mt-2 sm:mt-3 text-center">
             Completed today: {completedWorkSessions}
           </span>
         </div>
@@ -57,7 +52,7 @@ function Timer() {
         ) : (
           <button
             onClick={start}
-            className="bg-emerald-500 hover:bg-emerald-400 text-white font-semibold
+            className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white font-semibold
                        px-6 py-2 rounded-lg transition-colors"
           >
             Start
@@ -66,8 +61,8 @@ function Timer() {
 
         <button
           onClick={reset}
-          className="bg-slate-700 hover:bg-slate-600 text-white font-semibold
-                     px-6 py-2 rounded-lg transition-colors"
+          className="bg-[var(--bg-input)] hover:opacity-80 text-[var(--text-primary)] font-semibold
+                     px-6 py-2 rounded-lg transition-colors border border-[var(--border)]"
         >
           Reset
         </button>
@@ -75,7 +70,7 @@ function Timer() {
 
       <button
         onClick={() => switchSession(SESSION_TYPES.SHORT_BREAK)}
-        className="text-slate-500 hover:text-slate-300 text-xs underline transition-colors"
+        className="text-[var(--text-faint)] hover:text-[var(--text-secondary)] text-xs underline transition-colors"
       >
         Skip to Break
       </button>

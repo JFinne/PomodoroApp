@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+/* Default (Dark theme) fallback values — ThemeProvider overwrites
+   these on mount, but having real defaults here prevents a flash
+   of unstyled/wrong-colored content before that first effect runs. */
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-input: #0f172a;
+  --overlay: rgba(148, 163, 184, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --border: #334155;
+  --accent: #10b981;
+  --accent-hover: #34d399;
+}

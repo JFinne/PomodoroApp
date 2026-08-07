@@ -5,10 +5,6 @@ import { getTodayDateString, timeToMinutes, formatHourLabel } from '../../utils/
 import EventPanel from './EventPanel';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
-
-// Chosen so 1 minute = 1 pixel — that's what keeps the event
-// block positioning math below trivial (top = startMinutes,
-// height = durationMinutes, no scaling factor to track).
 const HOUR_HEIGHT = 60;
 
 interface PanelState {
@@ -59,14 +55,14 @@ function DailyPlanner() {
   }
 
   return (
-    <div className="bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-[28rem]">
-      <h2 className="text-slate-400 text-sm font-medium uppercase tracking-wide mb-4">
+    <div className="bg-[var(--bg-card)] rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-[28rem]">
+      <h2 className="text-[var(--text-muted)] text-sm font-medium uppercase tracking-wide mb-4">
         Today
       </h2>
 
       <div
         ref={scrollRef}
-        className="relative max-h-[420px] overflow-y-auto rounded-lg border border-slate-700"
+        className="relative max-h-[420px] overflow-y-auto rounded-lg border border-[var(--border)]"
       >
         <div className="relative" style={{ height: HOURS.length * HOUR_HEIGHT }}>
           {HOURS.map((hour) => (
@@ -74,13 +70,13 @@ function DailyPlanner() {
               key={hour}
               onClick={() => openCreatePanel(hour)}
               aria-label={`Add event at ${formatHourLabel(hour)}`}
-              className="absolute left-0 w-full flex items-start gap-2 text-left hover:bg-slate-900/40 transition-colors"
+              className="absolute left-0 w-full flex items-start gap-2 text-left hover:bg-[var(--overlay)] transition-colors"
               style={{ top: hour * HOUR_HEIGHT, height: HOUR_HEIGHT }}
             >
-              <span className="text-slate-600 text-[10px] w-12 shrink-0 pt-0.5 pl-2">
+              <span className="text-[var(--text-faint)] text-[10px] w-12 shrink-0 pt-0.5 pl-2">
                 {formatHourLabel(hour)}
               </span>
-              <span className="flex-1 border-t border-slate-700/60" />
+              <span className="flex-1 border-t border-[var(--border)]" />
             </button>
           ))}
 

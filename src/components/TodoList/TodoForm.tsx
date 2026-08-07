@@ -12,13 +12,8 @@ function TodoForm({ onAddTask, categories }: TodoFormProps) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const trimmed = inputValue.trim();
     if (trimmed === '') return;
-
-    // Empty string means "no category selected" — pass
-    // undefined instead so it matches Task's optional categoryId
-    // field rather than storing an empty string as a fake ID.
     onAddTask(trimmed, categoryId === '' ? undefined : categoryId);
     setInputValue('');
   }
@@ -31,9 +26,9 @@ function TodoForm({ onAddTask, categories }: TodoFormProps) {
         onChange={(event) => setInputValue(event.target.value)}
         placeholder="Add a task..."
         aria-label="New task"
-        className="bg-slate-900 text-white text-sm rounded-lg px-3 py-2
-                   placeholder:text-slate-600 outline-none focus:ring-2
-                   focus:ring-emerald-500"
+        className="bg-[var(--bg-input)] text-[var(--text-primary)] text-sm rounded-lg px-3 py-2
+                   placeholder:text-[var(--text-faint)] outline-none focus:ring-2
+                   focus:ring-[var(--accent)] border border-[var(--border)]"
       />
 
       <div className="flex gap-2">
@@ -41,8 +36,8 @@ function TodoForm({ onAddTask, categories }: TodoFormProps) {
           value={categoryId}
           onChange={(event) => setCategoryId(event.target.value)}
           aria-label="Task category"
-          className="flex-1 bg-slate-900 text-slate-300 text-sm rounded-lg px-3 py-2
-                     outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+          className="flex-1 bg-[var(--bg-input)] text-[var(--text-secondary)] text-sm rounded-lg px-3 py-2
+                     outline-none focus:ring-2 focus:ring-[var(--accent)] border border-[var(--border)] cursor-pointer"
         >
           <option value="">No category</option>
           {categories.map((category) => (
@@ -54,7 +49,7 @@ function TodoForm({ onAddTask, categories }: TodoFormProps) {
 
         <button
           type="submit"
-          className="bg-emerald-500 hover:bg-emerald-400 text-white text-sm
+          className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm
                      font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           Add
