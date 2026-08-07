@@ -1,18 +1,17 @@
-import useLocalStorage from '../../hooks/useLocalStorage';
+import { usePanelsContext } from '../../context/PanelsContext';
 import AddonMenu from '../Layout/AddonMenu';
 import type { AddonConfig } from '../../types';
 
-const ADDONS: AddonConfig[] = [{ key: 'todo', label: 'To-Do List' }];
+const ADDONS: AddonConfig[] = [
+  { key: 'todo', label: 'To-Do List' },
+  { key: 'timerManager', label: 'Timer Manager' },
+];
 
 function AddonSettings() {
-  const [openPanels, setOpenPanels] = useLocalStorage<Record<string, boolean>>(
-    'openPanels',
-    { todo: true }
-  );
-
-  function togglePanel(key: string) {
-    setOpenPanels({ ...openPanels, [key]: !openPanels[key] });
-  }
+  // Reads from the SHARED context now, not its own independent
+  // useLocalStorage call — this is the actual fix for the
+  // "doesn't show up until you navigate away and back" bug.
+  const { openPanels, togglePanel } = usePanelsContext();
 
   return (
     <div>

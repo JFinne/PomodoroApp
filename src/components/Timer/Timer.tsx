@@ -1,7 +1,6 @@
 import { useTimerContext } from '../../context/TimerContext';
 import { SESSION_TYPES } from '../../hooks/useTimer';
 import { formatTime } from '../../utils/timeFormat';
-import { PRESETS } from '../../utils/presets';
 import CircularProgress from './CircularProgress';
 
 const sessionLabels: Record<string, string> = {
@@ -21,36 +20,17 @@ function Timer() {
     pause,
     reset,
     switchSession,
-    applyPreset,
   } = useTimerContext();
 
-  // The ring drains as time passes, so progress should shrink
-  // as timeLeft shrinks — timeLeft / totalDuration gives exactly
-  // that: 1 at the start of a session, 0 right at the end.
   const progress = timeLeft / totalDuration;
 
-  function handlePresetChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const selected = PRESETS.find((preset) => preset.id === event.target.value);
-    if (selected) applyPreset(selected);
-  }
-
+  // The preset dropdown that used to live here is gone — preset
+  // selection now happens in Settings via TimerPresetSettings.tsx,
+  // which calls selectPreset() from the same TimerContext this
+  // component reads from. Both stay in sync automatically since
+  // they share one source of truth.
   return (
     <div className="flex flex-col items-center gap-6">
-      {/* Preset dropdown sits above the ring */}
-      <select
-        onChange={handlePresetChange}
-        defaultValue={PRESETS[0].id}
-        aria-label="Choose a timer preset"
-        className="bg-slate-800 text-slate-300 text-sm rounded-lg px-3 py-2
-                   outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
-      >
-        {PRESETS.map((preset) => (
-          <option key={preset.id} value={preset.id}>
-            {preset.label}
-          </option>
-        ))}
-      </select>
-
       <CircularProgress progress={progress} viewBoxSize={340} strokeWidth={14}>
         <div className="flex flex-col items-center px-2">
           <span className="text-slate-400 text-xs sm:text-sm font-medium uppercase tracking-wide mb-1 sm:mb-2 text-center">

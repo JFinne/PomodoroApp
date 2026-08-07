@@ -8,22 +8,22 @@ interface AddonMenuProps {
 
 function AddonMenu({ addons, openPanels, onToggle }: AddonMenuProps) {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col gap-2">
       {addons.map((addon) => {
         const isOpen = Boolean(openPanels[addon.key]);
         return (
-          <button
+          <label
             key={addon.key}
-            onClick={() => onToggle(addon.key)}
-            aria-pressed={isOpen}
-            className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
-              isOpen
-                ? 'bg-emerald-500 text-white'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-            }`}
+            className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none"
           >
+            <input
+              type="checkbox"
+              checked={isOpen}
+              onChange={() => onToggle(addon.key)}
+              className="w-4 h-4 accent-emerald-500 cursor-pointer"
+            />
             {addon.label}
-          </button>
+          </label>
         );
       })}
     </div>
